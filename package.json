@@ -1,0 +1,27 @@
+{
+  "name": "webtask-chat",
+  "version": "1.0.0",
+  "description": "Disposable private chat rooms using Webtask",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js | tap-color"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TehShrike/webtask-chat.git"
+  },
+  "keywords": [
+    "webtask",
+    "chat"
+  ],
+  "author": "TehShrike",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/TehShrike/webtask-chat/issues"
+  },
+  "homepage": "https://github.com/TehShrike/webtask-chat#readme",
+  "devDependencies": {
+    "tap-color": "1.1.0",
+    "zora": "3.0.0-0"
+  }
+}
