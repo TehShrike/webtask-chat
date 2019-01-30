@@ -4,7 +4,8 @@
   "description": "Disposable private chat rooms using Webtask",
   "main": "index.js",
   "scripts": {
-    "test": "node test.js | tap-color"
+    "test": "node test.js | tap-color",
+    "deploy": "wt create index.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,10 @@
   "homepage": "https://github.com/TehShrike/webtask-chat#readme",
   "devDependencies": {
     "tap-color": "1.1.0",
-    "zora": "3.0.0-0"
+    "wt-cli": "11.0.2",
+    "zora": "2.0.1"
+  },
+  "dependencies": {
+    "pify": "4.0.1"
   }
 }
