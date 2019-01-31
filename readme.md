@@ -18,7 +18,7 @@ The `first-run` script will
 - copy the endpoint URL to your clipboard
 - open the chat client in your browser
 
-To destroy endpoint and wipe any chat history, run
+To destroy the endpoint and wipe any chat history, run
 
 ```sh
 npm run destroy
