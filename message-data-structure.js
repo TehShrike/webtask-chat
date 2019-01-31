@@ -1,55 +1,33 @@
-module.exports = ({ number: lastMessageNumber, messages }, { number, from, message }) => {
-	if (typeof number !== `number` || typeof from !== `string` || typeof message !== `string`) {
-		throw new Error(`Must supply "number" as a number, "from" as a string, and "message" as a string`)
-	}
+const MAX_FROM_BYTES = 20
+const MAX_MESSAGE_BYTES = 500
+const MAX_MESSAGE_HISTORY = 20
 
-	if (number > lastMessageNumber + 1 || number < (lastMessageNumber - messages.length)) {
-		return makeDataStructureFit({
-			number: lastMessageNumber,
-			messages,
-		})
-	}
+module.exports = {
+	addMessage({ number: lastMessageNumber, messages }, { from, message }, { maxMessageHistory = MAX_MESSAGE_HISTORY } = {}) {
+		if (typeof from !== `string` || typeof message !== `string`) {
+			throw new Error(`Must supply "from" as a string, and "message" as a string`)
+		} else if (Buffer.byteLength(from) > MAX_FROM_BYTES) {
+			throw new Error(`Name is too long`)
+		} else if (Buffer.byteLength(message) > MAX_MESSAGE_BYTES) {
+			throw new Error(`Message is too long`)
+		}
 
-	if (number === lastMessageNumber + 1) {
-		return makeDataStructureFit({
+		return {
+			number: lastMessageNumber + 1,
+			messages: [
+				...(messages.slice(-(maxMessageHistory - 1))),
+				{ from, message },
+			],
+		}
+	},
+	getNewMessages({ number, messages }, lastSeen) {
+		const unseenMessageCount = number - lastSeen
+
+		return {
 			number,
-			messages: [
-				...messages,
-				{ from, message },
-			],
-		})
-	}
-
-	if (number === lastMessageNumber - messages.length) {
-		return makeDataStructureFit({
-			number: lastMessageNumber,
-			messages: [
-				{ from, message },
-				...messages,
-			],
-		})
-	}
-
-	const offsetFromTheExpectedNumber = lastMessageNumber - number + 1
-	const sliceIndex = messages.length - offsetFromTheExpectedNumber
-
-	return makeDataStructureFit({
-		number: lastMessageNumber,
-		messages: [
-			...messages.slice(0, sliceIndex),
-			{ from, message },
-			...messages.slice(sliceIndex),
-		],
-	})
-}
-
-const MAX_BYTES = module.exports.MAX_BYTES = 350 * 1024
-
-const makeDataStructureFit = data => {
-	// If you want to try to improve server-side performance, start here
-	while (Buffer.byteLength(JSON.stringify(data)) >= MAX_BYTES) {
-		data.messages.shift()
-	}
-
-	return data
+			messages: unseenMessageCount === 0
+				? []
+				: messages.slice(-unseenMessageCount),
+		}
+	},
 }

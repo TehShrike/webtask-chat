@@ -2,10 +2,11 @@
   "name": "webtask-chat",
   "version": "1.0.0",
   "description": "Disposable private chat rooms using Webtask",
-  "main": "index.js",
+  "main": "client-logic.js",
   "scripts": {
-    "test": "node test.js | tap-color",
-    "deploy": "wt create index.js"
+    "build": "rollup -c",
+    "test": "glob-module-file --pattern=*.test.js | node | tap-color",
+    "deploy": "npm run build && wt create bundle.js"
   },
   "repository": {
     "type": "git",
@@ -22,11 +23,14 @@
   },
   "homepage": "https://github.com/TehShrike/webtask-chat#readme",
   "devDependencies": {
+    "glob-module-file": "2.2.1",
+    "rollup": "1.1.2",
+    "rollup-plugin-commonjs": "9.2.0",
     "tap-color": "1.1.0",
     "wt-cli": "11.0.2",
     "zora": "2.0.1"
   },
   "dependencies": {
-    "pify": "4.0.1"
+    "get-stream": "4.1.0"
   }
 }
