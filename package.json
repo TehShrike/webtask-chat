@@ -6,7 +6,9 @@
   "scripts": {
     "build": "rollup -c",
     "test": "glob-module-file --pattern=*.test.js | node | tap-color",
-    "deploy": "npm run build && wt create bundle.js"
+    "deploy": "npm run build && wt create bundle.js && wt ls | node put-url-on-clipboard.js",
+    "first-run": "wt init && npm run deploy && opn \"https://svelte.technology/repl?version=2.16.0&gist=46b4fc00c52c196129c1ba42a5df0fb1\"",
+    "destroy": "wt rm webtask-chat"
   },
   "repository": {
     "type": "git",
@@ -24,9 +26,11 @@
   "homepage": "https://github.com/TehShrike/webtask-chat#readme",
   "devDependencies": {
     "glob-module-file": "2.2.1",
+    "opn": "^5.4.0",
     "rollup": "1.1.2",
     "rollup-plugin-commonjs": "9.2.0",
     "tap-color": "1.1.0",
+    "to-clipboard": "^0.4.0",
     "wt-cli": "11.0.2",
     "zora": "2.0.1"
   },
