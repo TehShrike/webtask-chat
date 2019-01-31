@@ -27,7 +27,7 @@ const methods = {
 	GET: async context => {
 		const storage = niceStorage(context.storage)
 
-		const lastSeenNumber = parseInt(context.query.number, 10)
+		const lastSeenNumber = parseInt(context.query.number, 10) || 0
 		const chatlog = await getChatlog(storage)
 
 		return getNewMessages(chatlog, lastSeenNumber)
