@@ -11,6 +11,17 @@ const niceStorage = contextStorage => ({
 })
 
 const getChatlog = niceStorage => niceStorage.get().then(chatlog => chatlog || { number: 0, messages: [] })
+const retryOnConflict = async fn => {
+	try {
+		return await fn()
+	} catch (err) {
+		if (err.code === 409) {
+			return await retryOnConflict(fn)
+		}
+
+		throw err
+	}
+}
 
 const methods = {
 	GET: async context => {
@@ -24,10 +35,15 @@ const methods = {
 	POST: async context => {
 		// really should return 400 instead of 500 if the message or from are too long
 		const storage = niceStorage(context.storage)
-		const chatlog = await getChatlog(storage)
 
-		const newStructure = addMessage(chatlog, context.body)
-		await storage.set(newStructure)
+		const newStructure = await retryOnConflict(async() => {
+			const chatlog = await getChatlog(storage)
+
+			const newStructure = addMessage(chatlog, context.body)
+			await storage.set(newStructure)
+
+			return newStructure
+		})
 
 		const lastSeenNumber = parseInt(context.body.number, 10) || 0
 		return getNewMessages(newStructure, lastSeenNumber)
