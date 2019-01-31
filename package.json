@@ -26,7 +26,7 @@
   "homepage": "https://github.com/TehShrike/webtask-chat#readme",
   "devDependencies": {
     "glob-module-file": "2.2.1",
-    "opn": "^5.4.0",
+    "opn-cli": "^4.0.0",
     "rollup": "1.1.2",
     "rollup-plugin-commonjs": "9.2.0",
     "tap-color": "1.1.0",
